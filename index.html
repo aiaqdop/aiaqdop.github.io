@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,7 +31,8 @@
             width: 100%;
         }
 
-        #resultTable th, #resultTable td {
+        #resultTable th,
+        #resultTable td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
@@ -41,7 +43,7 @@
         }
 
         .playerScore {
-            /* Стили для цветов фона ячейки с очками игрока */
+            font-weight: bold;
         }
 
         .red {
@@ -51,19 +53,20 @@
         .orange {
             background-color: #FFD700;
         }
- 
-        .green {
-            background-color: #98FB98;
-        }
 
         .yellow {
             background-color: #FFFF00;
         }
+
+        .green {
+            background-color: #98FB98;
+        }
     </style>
 </head>
+
 <body>
     <h1>Футбольный калькулятор</h1>
-    
+
     <label for="playerName">Имя футболиста: </label>
     <input type="text" id="playerName" placeholder="Введите имя"><br>
 
@@ -102,7 +105,7 @@
 
     <div id="totalScoreBlock">
         <h2>Общий балл:</h2>
-        <p id="totalScore"></p>
+        <p id="totalScore" class="playerScore"></p>
     </div>
 
     <div id="resultBlock">
@@ -136,30 +139,39 @@
             const playerTime = parseInt(document.getElementById('playerTime').value);
             const substitute = parseInt(document.getElementById('substitute').value);
 
-            let goalWeight, assistWeight;
+            let goalWeight, assistWeight, minScore, maxScore;
             if (position === 'nap') {
                 goalWeight = 2;
                 assistWeight = 3;
+                minScore = 0;
+                maxScore = Infinity;
             } else if (position === 'pz') {
                 goalWeight = 3;
                 assistWeight = 2;
+                minScore = 0;
+                maxScore = Infinity;
             } else if (position === 'z') {
                 goalWeight = 4;
                 assistWeight = 4;
+                minScore = 0;
+                maxScore = Infinity;
             }
 
             const goalScore = goals * goalWeight;
             const penaltyGoalScore = penaltyGoals * 1;
             const assistScore = assists * assistWeight;
-            const playerMatchScore = ((totalMatches - playerMatches) / totalMatches) * 100; // чем больше матчей, тем меньше баллов
-            const playerTimeScore = ((totalTime - playerTime) / totalTime) * 26; // чем больше минут, тем меньше баллов
+            const playerMatchScore = ((totalMatches - playerMatches) / totalMatches) * 100;
+            const playerTimeScore = ((totalTime - playerTime) / totalTime) * 26;
             const substituteScore = substitute * 0.5;
 
             const totalScore = goalScore + penaltyGoalScore + assistScore +
-                               playerMatchScore + playerTimeScore + substituteScore;
+                playerMatchScore + playerTimeScore + substituteScore;
 
             // Отображаем общий балл
-            document.getElementById('totalScore').innerHTML = `${totalScore.toFixed(2)} баллов`;
+            const totalScoreElement = document.getElementById('totalScore');
+            totalScoreElement.innerHTML = `${totalScore.toFixed(2)} баллов`;
+            totalScoreElement.className = getScoreColor(totalScore, minScore, maxScore, position);
+
             document.getElementById('totalScoreBlock').style.display = 'block';
 
             // Создаем строку с результатами
@@ -173,7 +185,7 @@
                     <td>${playerMatches}</td>
                     <td>${playerTime}</td>
                     <td>${substitute}</td>
-                    <td class="playerScore ${getBackgroundColorClass(totalScore)}">${totalScore.toFixed(2)}</td>
+                    <td class="playerScore ${getScoreColor(totalScore, minScore, maxScore, position)}">${totalScore.toFixed(2)}</td>
                     <td><button onclick="deleteRow(this)">Удалить</button></td>
                 </tr>
             `;
@@ -192,17 +204,44 @@
             row.parentNode.removeChild(row);
         }
 
-        function getBackgroundColorClass(score) {
-            if (score >= 0 && score <= 19) {
-                return 'red';
-            } else if (score >= 20 && score <= 39) {
-                return 'orange';
-            } else if (score >= 40 && score <= 59) {
-                return 'yellow';
+        function getScoreColor(score, min, max, position) {
+            if (score >= min && score <= max) {
+                if (position === 'nap') {
+                    if (score >= 90) {
+                        return 'green';
+                    } else if (score >= 60) {
+                        return 'yellow';
+                    } else if (score >= 30) {
+                        return 'orange';
+                    } else {
+                        return 'red';
+                    }
+                } else if (position === 'pz') {
+                    if (score >= 60) {
+                        return 'green';
+                    } else if (score >= 40) {
+                        return 'yellow';
+                    } else if (score >= 20) {
+                        return 'orange';
+                    } else {
+                        return 'red';
+                    }
+                } else if (position === 'z') {
+                    if (score >= 30) {
+                        return 'green';
+                    } else if (score >= 20) {
+                        return 'yellow';
+                    } else if (score >= 10) {
+                        return 'orange';
+                    } else {
+                        return 'red';
+                    }
+                }
             } else {
-                return 'green'; // По умолчанию, если значение не соответствует ни одному диапазону
+                return ''; // По умолчанию, если значение не соответствует заданным диапазонам
             }
         }
     </script>
 </body>
+
 </html>
