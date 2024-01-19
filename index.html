@@ -6,88 +6,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Футбольный калькулятор</title>
     <style>
-
-body {
-            text-align: center;
-        }
-        .center {
-            display: inline-block;
-        }
-        #resultBlock {
-            display: none;
-            margin-top: 20px;
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        #totalScoreBlock {
-            display: none;
-            margin-top: 20px;
+        #calculateForm {
+            width: 60%;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
         }
 
         #calculateButton {
             font-weight: bold;
         }
+
+        #resultBlock, #totalScoreBlock {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Футбольный калькулятор</h1>
-    
-    <label for="playerName">Имя футболиста: </label>
-    <input type="text" id="playerName" placeholder="Введите имя"><br>
+    <div id="calculateForm">
+        <h1>Футбольный калькулятор</h1>
+        
+        <label for="playerName">Имя футболиста:</label>
+        <input type="text" id="playerName" placeholder="Введите имя">
 
-    <label for="position">Позиция игрока: </label>
-    <select id="position">
-        <option value="nap">Нападающий</option>
-        <option value="pz">Полузащитник</option>
-        <option value="z">Защитник</option>
-    </select><br>
+        <label for="position">Позиция игрока:</label>
+        <select id="position">
+            <option value="nap">Нападающий</option>
+            <option value="pz">Полузащитник</option>
+            <option value="z">Защитник</option>
+        </select>
 
-    <label for="goals">Голы: </label>
-    <input type="number" id="goals" value="0"><br>
+        <label for="goals">Голы:</label>
+        <input type="number" id="goals" value="0">
 
-    <label for="penaltyGoals">Голы (пенальти): </label>
-    <input type="number" id="penaltyGoals" value="0"><br>
+        <label for="penaltyGoals">Голы (пенальти):</label>
+        <input type="number" id="penaltyGoals" value="0">
 
-    <label for="assists">Голевые пасы: </label>
-    <input type="number" id="assists" value="0"><br>
+        <label for="assists">Голевые пасы:</label>
+        <input type="number" id="assists" value="0">
 
-    <label for="totalMatches">Всего матчей в сезоне: </label>
-    <input type="number" id="totalMatches" value="26" readonly><br>
+        <label for="totalMatches">Всего матчей в сезоне:</label>
+        <input type="number" id="totalMatches" value="26" readonly>
 
-    <label for="playerMatches">Матчи игрока: </label>
-    <input type="number" id="playerMatches" value="0"><br>
+        <label for="playerMatches">Матчи игрока:</label>
+        <input type="number" id="playerMatches" value="0">
 
-    <label for="totalTime">Общее время в сезоне (в минутах): </label>
-    <input type="number" id="totalTime" value="2340" readonly><br>
+        <label for="totalTime">Общее время в сезоне (в минутах):</label>
+        <input type="number" id="totalTime" value="2340" readonly>
 
-    <label for="playerTime">Время игрока проведенное на поле (в минутах): </label>
-    <input type="number" id="playerTime" value="0"><br>
+        <label for="playerTime">Время игрока проведенное на поле (в минутах):</label>
+        <input type="number" id="playerTime" value="0">
 
-    <label for="substitute">Запас: </label>
-    <input type="number" id="substitute" value="0"><br>
+        <label for="substitute">Запас:</label>
+        <input type="number" id="substitute" value="0">
 
-    <button id="calculateButton" onclick="calculateScores()">Рассчитать баллы</button>
+        <button id="calculateButton" onclick="calculateScores()">Рассчитать баллы</button>
 
-    <div id="totalScoreBlock">
-        <h2>Общий балл:</h2>
-        <p id="totalScore"></p>
-    </div>
+        <div id="totalScoreBlock">
+            <h2>Общий балл:</h2>
+            <p id="totalScore"></p>
+        </div>
 
-    <div id="resultBlock">
-        <h2>Результаты</h2>
-        <table id="resultTable" border="1">
-            <tr>
-                <th>Имя</th>
-                <th>Позиция</th>
-                <th>Голы</th>
-                <th>Голы (пенальти)</th>
-                <th>Голевые пасы</th>
-                <th>Матчи игрока</th>
-                <th>Время на поле</th>
-                <th>Запас</th>
-                <th>Очки</th>
-                <th>Действие</th>
-            </tr>
-        </table>
+        <div id="resultBlock">
+            <h2>Результаты</h2>
+            <table id="resultTable" border="1">
+                <tr>
+                    <th>Имя</th>
+                    <th>Позиция</th>
+                    <th>Голы</th>
+                    <th>Голы (пенальти)</th>
+                    <th>Голевые пасы</th>
+                    <th>Матчи игрока</th>
+                    <th>Время на поле</th>
+                    <th>Запас</th>
+                    <th>Очки</th>
+                    <th>Действие</th>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -118,18 +138,16 @@ body {
             const goalScore = goals * goalWeight;
             const penaltyGoalScore = penaltyGoals * 1;
             const assistScore = assists * assistWeight;
-            const playerMatchScore = ((totalMatches - playerMatches) / totalMatches) * 100; // чем больше матчей, тем меньше баллов
-            const playerTimeScore = ((totalTime - playerTime) / totalTime) * 26; // чем больше минут, тем меньше баллов
+            const playerMatchScore = ((totalMatches - playerMatches) / totalMatches) * 100;
+            const playerTimeScore = ((totalTime - playerTime) / totalTime) * 26;
             const substituteScore = substitute * 0.5;
 
             const totalScore = goalScore + penaltyGoalScore + assistScore +
                                playerMatchScore + playerTimeScore + substituteScore;
 
-            // Отображаем общий балл
             document.getElementById('totalScore').innerHTML = `${totalScore.toFixed(2)} баллов`;
             document.getElementById('totalScoreBlock').style.display = 'block';
 
-            // Создаем строку с результатами
             const resultRow = `
                 <tr>
                     <td>${playerName}</td>
@@ -145,16 +163,13 @@ body {
                 </tr>
             `;
 
-            // Вставляем строку с результатами в конец таблицы
             const table = document.getElementById('resultTable');
             table.insertAdjacentHTML('beforeend', resultRow);
 
-            // Отображаем блок с результатами
             document.getElementById('resultBlock').style.display = 'block';
         }
 
         function deleteRow(button) {
-            // Получаем родительскую строку и удаляем ее
             const row = button.parentNode.parentNode;
             row.parentNode.removeChild(row);
         }
