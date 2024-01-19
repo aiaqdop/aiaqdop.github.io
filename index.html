@@ -6,13 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Футбольный калькулятор</title>
     <style>
-      
-body {
-        
-        margin-left: 100px; /* добавлено */
-        margin-right: 100px; /* добавлено */
-    }
-  #resultBlock {
+        body {
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+
+        #resultBlock {
             display: none;
             margin-top: 20px;
         }
@@ -24,6 +23,37 @@ body {
 
         #calculateButton {
             font-weight: bold;
+        }
+
+        #resultTable {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #resultTable th, #resultTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        #resultTable th {
+            background-color: #f2f2f2;
+        }
+
+        .playerScore {
+            /* Стили для цветов фона ячейки с очками игрока */
+        }
+
+        .red {
+            background-color: #FFB6C1;
+        }
+
+        .orange {
+            background-color: #FFD700;
+        }
+
+        .green {
+            background-color: #98FB98;
         }
     </style>
 </head>
@@ -139,7 +169,7 @@ body {
                     <td>${playerMatches}</td>
                     <td>${playerTime}</td>
                     <td>${substitute}</td>
-                    <td>${totalScore.toFixed(2)}</td>
+                    <td class="playerScore ${getBackgroundColorClass(totalScore)}">${totalScore.toFixed(2)}</td>
                     <td><button onclick="deleteRow(this)">Удалить</button></td>
                 </tr>
             `;
@@ -156,6 +186,18 @@ body {
             // Получаем родительскую строку и удаляем ее
             const row = button.parentNode.parentNode;
             row.parentNode.removeChild(row);
+        }
+
+        function getBackgroundColorClass(score) {
+            if (score >= 0 && score <= 19) {
+                return 'red';
+            } else if (score >= 20 && score <= 39) {
+                return 'orange';
+            } else if (score >= 40 && score <= 59) {
+                return 'green';
+            } else {
+                return ''; // По умолчанию, если значение не соответствует ни одному диапазону
+            }
         }
     </script>
 </body>
