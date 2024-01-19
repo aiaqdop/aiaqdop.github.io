@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Футбольный калькулятор</title>
+    <style>
+        #resultBlock {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #totalScoreBlock {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #calculateButton {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Футбольный калькулятор</h1>
+    
+    <label for="playerName">Имя футболиста: </label>
+    <input type="text" id="playerName" placeholder="Введите имя"><br>
+
+    <label for="position">Позиция игрока: </label>
+    <select id="position">
+        <option value="nap">Нападающий</option>
+        <option value="pz">Полузащитник</option>
+        <option value="z">Защитник</option>
+    </select><br>
+
+    <label for="goals">Голы: </label>
+    <input type="number" id="goals" value="0"><br>
+
+    <label for="penaltyGoals">Голы (пенальти): </label>
+    <input type="number" id="penaltyGoals" value="0"><br>
+
+    <label for="assists">Голевые пасы: </label>
+    <input type="number" id="assists" value="0"><br>
+
+    <label for="totalMatches">Всего матчей в сезоне: </label>
+    <input type="number" id="totalMatches" value="26" readonly><br>
+
+    <label for="playerMatches">Матчи игрока: </label>
+    <input type="number" id="playerMatches" value="0"><br>
+
+    <label for="totalTime">Общее время в сезоне (в минутах): </label>
+    <input type="number" id="totalTime" value="2340" readonly><br>
+
+    <label for="playerTime">Время игрока проведенное на поле (в минутах): </label>
+    <input type="number" id="playerTime" value="0"><br>
+
+    <label for="substitute">Запас: </label>
+    <input type="number" id="substitute" value="0"><br>
+
+    <button id="calculateButton" onclick="calculateScores()">Рассчитать баллы</button>
+
+    <div id="totalScoreBlock">
+        <h2>Общий балл:</h2>
+        <p id="totalScore"></p>
+    </div>
+
+    <div id="resultBlock">
+        <h2>Результаты</h2>
+        <table id="resultTable" border="1">
+            <tr>
+                <th>Имя</th>
+                <th>Позиция</th>
+                <th>Голы</th>
+                <th>Голы (пенальти)</th>
+                <th>Голевые пасы</th>
+                <th>Матчи игрока</th>
+                <th>Время на поле</th>
+                <th>Запас</th>
+                <th>Очки</th>
+                <th>Действие</th>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        function calculateScores() {
+            const playerName = document.getElementById('playerName').value;
+            const position = document.getElementById('position').value;
+            const goals = parseInt(document.getElementById('goals').value);
+            const penaltyGoals = parseInt(document.getElementById('penaltyGoals').value);
+            const assists = parseInt(document.getElementById('assists').value);
+            const totalMatches = parseInt(document.getElementById('totalMatches').value);
+            const playerMatches = parseInt(document.getElementById('playerMatches').value);
+            const totalTime = parseInt(document.getElementById('totalTime').value);
+            const playerTime = parseInt(document.getElementById('playerTime').value);
+            const substitute = parseInt(document.getElementById('substitute').value);
+
+            let goalWeight, assistWeight;
+            if (position === 'nap') {
+                goalWeight = 2;
+                assistWeight = 3;
+            } else if (position === 'pz') {
+                goalWeight = 3;
+                assistWeight = 2;
+            } else if (position === 'z') {
+                goalWeight = 4;
+                assistWeight = 4;
+            }
+
+            const goalScore = goals * goalWeight;
+            const penaltyGoalScore = penaltyGoals * 1;
+            const assistScore = assists * assistWeight;
+            const playerMatchScore = ((totalMatches - playerMatches) / totalMatches) * 100; // чем больше матчей, тем меньше баллов
+            const playerTimeScore = ((totalTime - playerTime) / totalTime) * 26; // чем больше минут, тем меньше баллов
+            const substituteScore = substitute * 0.5;
+
+            const totalScore = goalScore + penaltyGoalScore + assistScore +
+                               playerMatchScore + playerTimeScore + substituteScore;
+
+            // Отображаем общий балл
+            document.getElementById('totalScore').innerHTML = `${totalScore.toFixed(2)} баллов`;
+            document.getElementById('totalScoreBlock').style.display = 'block';
+
+            // Создаем строку с результатами
+            const resultRow = `
+                <tr>
+                    <td>${playerName}</td>
+                    <td>${position === 'nap' ? 'Нападающий' : (position === 'pz' ? 'Полузащитник' : 'Защитник')}</td>
+                    <td>${goals}</td>
+                    <td>${penaltyGoals}</td>
+                    <td>${assists}</td>
+                    <td>${playerMatches}</td>
+                    <td>${playerTime}</td>
+                    <td>${substitute}</td>
+                    <td>${totalScore.toFixed(2)}</td>
+                    <td><button onclick="deleteRow(this)">Удалить</button></td>
+                </tr>
+            `;
+
+            // Вставляем строку с результатами в конец таблицы
+            const table = document.getElementById('resultTable');
+            table.insertAdjacentHTML('beforeend', resultRow);
+
+            // Отображаем блок с результатами
+            document.getElementById('resultBlock').style.display = 'block';
+        }
+
+        function deleteRow(button) {
+            // Получаем родительскую строку и удаляем ее
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+</body>
+</html>
