@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Отслеживание расходов и доходов футбольного клуба</title>
+<style>
+    /* Стили для таблицы */
+    table {
+        border-collapse: collapse;
+        width: 80%; /* Устанавливаем ширину таблицы */
+        margin: 20px auto; /* Центрируем таблицу на странице */
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .income { background-color: lightgreen; }
+    .expense { background-color: pink; }
+</style>
+</head>
+<body>
+
+<h2>Отслеживание расходов и доходов футбольного клуба</h2>
+
+<!-- Таблица расходов и доходов -->
+<table id="transactionsTable">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Описание</th>
+            <th>Сумма</th>
+            <th>Тип</th>
+            <th>Количество</th>
+            <th>Общая сумма</th>
+        </tr>
+    </thead>
+    <tbody id="transactionsBody">
+        <!-- Здесь будут добавлены строки таблицы с помощью JavaScript -->
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="4">Итого:</th>
+            <th id="totalCount"></th>
+            <th id="totalAmount"></th>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+    var transactions = []; // Массив для хранения транзакций
+
+    // Функция для добавления новой транзакции в таблицу и массив
+    function addTransaction(date, description, amount, type, count) {
+        var totalAmount = (parseFloat(amount) * parseInt(count)).toFixed(2);
+        transactions.push({date: date, description: description, amount: amount, type: type, count: count, totalAmount: totalAmount});
+        updateTable();
+    }
+
+    // Функция для обновления таблицы
+    function updateTable() {
+        var tableBody = document.getElementById("transactionsBody");
+        tableBody.innerHTML = ""; // Очищаем тело таблицы перед добавлением новых данных
+        var totalAmount = 0;
+        var totalCount = 0;
+
+        transactions.forEach(function(transaction) {
+            var row = "<tr class='" + transaction.type + "'>";
+            row += "<td>" + transaction.date + "</td>";
+            row += "<td>" + transaction.description + "</td>";
+            row += "<td>" + transaction.amount + "</td>";
+            row += "<td>" + transaction.type + "</td>";
+            row += "<td>" + transaction.count + "</td>";
+            row += "<td>" + transaction.totalAmount + "</td>";
+            row += "</tr>";
+            tableBody.innerHTML += row;
+
+            // Добавляем сумму расходов или доходов к общей сумме
+            if (transaction.type === "income") {
+                totalAmount += parseFloat(transaction.totalAmount);
+            } else if (transaction.type === "expense") {
+                totalAmount -= parseFloat(transaction.totalAmount);
+            }
+
+            // Добавляем количество к общему количеству
+            totalCount += parseInt(transaction.count);
+        });
+
+        // Обновляем общую сумму
+        document.getElementById("totalAmount").textContent = totalAmount.toFixed(2);
+        // Обновляем общее количество
+        document.getElementById("totalCount").textContent = totalCount;
+    }
+
+    // Вызываем функцию для обновления таблицы при загрузке страницы
+    updateTable();
+</script>
+
+<!-- Форма для добавления новой транзакции -->
+<h3>Добавить новую транзакцию:</h3>
+<form onsubmit="event.preventDefault(); addTransaction(this.date.value, this.description.value, this.amount.value, this.type.value, this.count.value);">
+    <label for="date">Дата:</label>
+    <input type="date" id="date" name="date" required><br>
+    <label for="description">Описание:</label>
+    <input type="text" id="description" name="description" required><br>
+    <label for="amount">Сумма:</label>
+    <input type="number" id="amount" name="amount" step="0.01" required><br>
+    <label for="type">Тип:</label>
+    <select id="type" name="type" required>
+        <option value="income">Доход</option>
+        <option value="expense">Расход</option>
+    </select><br>
+    <label for="count">Количество:</label>
+    <input type="number" id="count" name="count" required><br>
+    <button type="submit">Добавить транзакцию</button>
+</form>
+  <a href="https://aiaqdop.github.io/">Calc</a>
+<a href="https://aiaqdop.github.io/ordabasy">Orda</a>
+<a href="https://aiaqdop.github.io/ordafinance/">Finance</a>
+</body>
+</html>
