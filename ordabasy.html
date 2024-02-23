@@ -10,11 +10,12 @@
         border-collapse: collapse;
         width: 50%;
         margin: 0 auto; 
+        text-align: center;
     }
     th, td {
-        border: 1px solid #ddd;
-        padding: 1px; /* Жолдардың аралығын қиып алу үшін 5px */
-        text-align: left;
+        border: 2px solid #ddd;
+        padding: 5px; /* Жолдардың аралығын қиып алу үшін 5px */
+        text-align: center;
     }
     th {
         background-color: #f2f2f2;
@@ -26,7 +27,7 @@
 </head>
 <body>
 
-<h2>Ордабасыдың ойын нәтижелері</h2>
+<h2 align="center">Ордабасыдың ойын нәтижелері</h2>
 
 <!-- Нәтиже таңдауы үшін фильтр -->
 <select id="resultFilter">
@@ -51,10 +52,13 @@
     <tbody>
         <!-- Мәліметтер жаңартылғанда кестенің қатарларына қосылатын жолдар -->
     </tbody>
+    <tfoot>
+        <!-- Строка для общего количества очков -->
+        <tr id="totalPointsRow">
+            <td colspan="6">Жалпы ұпай саны: <span id="totalPointsValue"></span></td>
+        </tr>
+    </tfoot>
 </table>
-
-<!-- Жалпы алдын ала ұпай саныы -->
-<div id="totalPoints"></div>
 
 <script>
     // Ордабасы ойындары жайлы деректер (осы массивты өзіңіздікімен ауыстырыңыз)
@@ -85,7 +89,9 @@
         { round: "24 тур", date: "26-27 октябрь", homeTeam: "Ордабасы", awayTeam: "Жеңіс", result: "", choice: "" },
         { round: "25 тур", date: "2-3 ноябрь", homeTeam: "Қайрат", awayTeam: "Ордабасы", result: "", choice: "" },
         { round: "26 тур", date: "10 ноябрь", homeTeam: "Ордабасы", awayTeam: "Елімай", result: "", choice: "" }
+    
     ];
+
     // Ойын нәтижелерін кестеде көрсету үшін функция
     function displayMatches(matches) {
         var tableBody = document.querySelector("#matchesTable tbody");
@@ -120,7 +126,7 @@
         var previousResult = matchesData[selectedIndex].result;
         matchesData[selectedIndex].result = selectedResult;
         var totalPoints = calculateTotalPoints(matchesData);
-        document.querySelector("#totalPoints").textContent = "Жалпы ұпай саны: " + totalPoints;
+        document.querySelector("#totalPointsValue").textContent = totalPoints;
         updateResultCell(selectedIndex, selectedResult);
     }
 
@@ -147,7 +153,7 @@
     // Бет жүктелгенде іске асыру
     displayMatches(matchesData);
     var totalPoints = calculateTotalPoints(matchesData);
-    document.querySelector("#totalPoints").textContent = "Жалпы ұпай саны: " + totalPoints;
+    document.querySelector("#totalPointsValue").textContent = totalPoints;
 
     // Нәтиже таңдау фильтрінің әрекеті
     document.querySelector("#resultFilter").addEventListener("change", function() {
@@ -157,11 +163,9 @@
         });
         displayMatches(filteredMatches);
         var totalPoints = calculateTotalPoints(filteredMatches);
-        document.querySelector("#totalPoints").textContent = "Жалпы ұпай саны: " + totalPoints;
+        document.querySelector("#totalPointsValue").textContent = totalPoints;
     });
 </script>
-   <a href="https://aiaqdop.github.io/">Калькулятор</a>
-<a href="https://aiaqdop.github.io/ordabasy">Ордабасы</a>
-<a href="https://aiaqdop.github.io/ordafinance">Қаржы</a>
+
 </body>
 </html>
