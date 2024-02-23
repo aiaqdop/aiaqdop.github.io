@@ -23,22 +23,26 @@
     .win { background-color: lightgreen; }
     .draw { background-color: yellow; }
     .loss { background-color: pink; }
+
+
+    .totalPointsRow { text-align:10px }
 </style>
 </head>
 <body>
 
-<h2 align="center">Ордабасыдың ойын нәтижелері</h2>
 
-<!-- Нәтиже таңдауы үшін фильтр -->
-<select id="resultFilter">
-    <option value="">Барлық нәтижелер</option>
-    <option value="win">Жеңіс</option>
-    <option value="draw">Тең</option>
-    <option value="loss">Жеңіліс</option>
-</select>
+
+
 
 <!-- Ойын нәтиже кестесі -->
 <table id="matchesTable">
+   <thead>
+        <!-- Жалпы ұпай -->
+        <tr id="totalPointsRow">
+            <td colspan="6"; style="font-weight: bold; font-size: 25px;"> Ордабасы ойын нәтижелері</td>
+        </tr>
+    </thead>
+   
     <thead>
         <tr>
             <th>Тур</th>
@@ -53,13 +57,19 @@
         <!-- Мәліметтер жаңартылғанда кестенің қатарларына қосылатын жолдар -->
     </tbody>
     <tfoot>
-        <!-- Строка для общего количества очков -->
+        <!-- Жалпы ұпай -->
         <tr id="totalPointsRow">
-            <td colspan="6">Жалпы ұпай саны: <span id="totalPointsValue"></span></td>
+            <td colspan="6"; style="font-weight: bold; font-size: 18px;">Жалпы ұпай саны: <span id="totalPointsValue"></span></td>
         </tr>
     </tfoot>
 </table>
-
+<!-- Нәтиже таңдауы үшін фильтр -->
+<select id="resultFilter">
+    <option value="">Барлық нәтижелер</option>
+    <option value="win">Жеңіс</option>
+    <option value="draw">Тең</option>
+    <option value="loss">Жеңіліс</option>
+</select>
 <script>
     // Ордабасы ойындары жайлы деректер (осы массивты өзіңіздікімен ауыстырыңыз)
    var matchesData = [
@@ -166,6 +176,9 @@
         document.querySelector("#totalPointsValue").textContent = totalPoints;
     });
 </script>
-
+<br>
+ <a href="https://aiaqdop.github.io/">Calc</a>
+<a href="https://aiaqdop.github.io/ordabasy">Orda</a>
+<a href="https://aiaqdop.github.io/ordafinance">Finance</a>
 </body>
 </html>
