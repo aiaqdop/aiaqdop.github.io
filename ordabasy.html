@@ -1,18 +1,18 @@
- <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="kk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Результаты матчей Ордабасы</title>
+<title>Ордабасы ойын нәтижелері</title>
 <style>
-    /* Стили для таблицы */
+    /* Кестені стилдеу */
     table {
         border-collapse: collapse;
         width: 100%;
     }
     th, td {
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: 5px; /* Жолдардың аралығын қиып алу үшін 5px */
         text-align: left;
     }
     th {
@@ -25,70 +25,70 @@
 </head>
 <body>
 
-<h2>Результаты матчей Ордабасы</h2>
+<h2>Ордабасыдың ойын нәтижелері</h2>
 
-<!-- Фильтр для выбора результата -->
+<!-- Нәтиже таңдауы үшін фильтр -->
 <select id="resultFilter">
-    <option value="">Все результаты</option>
-    <option value="win">Победа</option>
-    <option value="draw">Ничья</option>
-    <option value="loss">Поражение</option>
+    <option value="">Барлық нәтижелер</option>
+    <option value="win">Жеңіс</option>
+    <option value="draw">Тең</option>
+    <option value="loss">Жеңіліс</option>
 </select>
 
-<!-- Таблица результатов матчей -->
+<!-- Ойын нәтиже кестесі -->
 <table id="matchesTable">
     <thead>
         <tr>
             <th>Тур</th>
-            <th>Дата</th>
-            <th>Домашняя команда</th>
-            <th>Гостевая команда</th>
-            <th>Результат</th>
-            <th>Выбор результата</th>
+            <th>Күні</th>
+            <th>Үйде</th>
+            <th>Қонақта</th>
+            <th>Нәтиже</th>
+            <th>Нәтижені таңдау</th>
         </tr>
     </thead>
     <tbody>
-        <!-- Здесь будут добавлены строки таблицы с помощью JavaScript -->
+        <!-- Мәліметтер жаңартылғанда кестенің қатарларына қосылатын жолдар -->
     </tbody>
 </table>
 
-<!-- Общее количество очков -->
+<!-- Жалпы алдын ала ұпай саныы -->
 <div id="totalPoints"></div>
 
 <script>
-    // Данные о матчах Ордабасы (замените этот массив на ваш собственный)
+    // Ордабасы ойындары жайлы деректер (осы массивты өзіңіздікімен ауыстырыңыз)
    var matchesData = [
-        { round: "1 тур", date: "1-2 марта", homeTeam: "Ордабасы", awayTeam: "Шахтер", result: "", choice: "" },
-        { round: "2 тур", date: "5-7 марта", homeTeam: "Атырау", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "3 тур", date: "30-31 марта", homeTeam: "Ордабасы", awayTeam: "Кайрат", result: "", choice: "" },
-        { round: "4 тур", date: "6-7 апреля", homeTeam: "Туран", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "5 тур", date: "20-21 апреля", homeTeam: "Ордабасы", awayTeam: "Кызылжар", result: "", choice: "" },
-        { round: "6 тур", date: "27-28 апреля", homeTeam: "Елимай", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "7 тур", date: "4-5 мая", homeTeam: "Мактаарал", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "8 тур", date: "11-12 мая", homeTeam: "Ордабасы", awayTeam: "Тобол", result: "", choice: "" },
-        { round: "9 тур", date: "18-19 мая", homeTeam: "Актобе", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "10 тур", date: "1-2 июня", homeTeam: "Ордабасы", awayTeam: "Жетысу", result: "", choice: "" },
-        { round: "11 тур", date: "15-16 июня", homeTeam: "Астана", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "12 тур", date: "22-23 июня", homeTeam: "Ордабасы", awayTeam: "Женис", result: "", choice: "" },
-        { round: "13 тур", date: "29-30 июня", homeTeam: "Ордабасы", awayTeam: "Кайсар", result: "", choice: "" },
-        { round: "14 тур", date: "13-14 июля", homeTeam: "Ордабасы", awayTeam: "Туран", result: "", choice: "" },
-        { round: "15 тур", date: "20-21 июля", homeTeam: "Жетысу", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "16 тур", date: "3-4 августа", homeTeam: "Ордабасы", awayTeam: "Мактаарал", result: "", choice: "" },
-        { round: "17 тур", date: "17-18 августа", homeTeam: "Шахтер", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "18 тур", date: "24-25 августа", homeTeam: "Ордабасы", awayTeam: "Астана", result: "", choice: "" },
-        { round: "19 тур", date: "31 августа-1 сентября", homeTeam: "Ордабасы", awayTeam: "Кызылжар", result: "", choice: "" },
-        { round: "20 тур", date: "14-15 сентября", homeTeam: "Кайрат", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "21 тур", date: "21-22 сентября", homeTeam: "Ордабасы", awayTeam: "Кайсар", result: "", choice: "" },
-        { round: "22 тур", date: "5-6 октября", homeTeam: "Кайсар", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "23 тур", date: "19-20 октября", homeTeam: "Ордабасы", awayTeam: "Тобол", result: "", choice: "" },
-        { round: "24 тур", date: "26-27 октября", homeTeam: "Женис", awayTeam: "Ордабасы", result: "", choice: "" },
-        { round: "25 тур", date: "2-3 ноября", homeTeam: "Ордабасы", awayTeam: "Кайрат", result: "", choice: "" },
-        { round: "26 тур", date: "10 ноября", homeTeam: "Елимай", awayTeam: "Ордабасы", result: "", choice: "" }
+        { round: "1 тур", date: "1-2 март", homeTeam: "Ордабасы", awayTeam: "Шахтер", result: "", choice: "" },
+        { round: "2 тур", date: "5-7 март", homeTeam: "Атырау", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "3 тур", date: "30-31 март", homeTeam: "Ордабасы", awayTeam: "Қайрат", result: "", choice: "" },
+        { round: "4 тур", date: "6-7 апрель", homeTeam: "Тұран", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "5 тур", date: "20-21 апрель", homeTeam: "Ордабасы", awayTeam: "Қызылжар", result: "", choice: "" },
+        { round: "6 тур", date: "27-28 апрель", homeTeam: "Елімай", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "7 тур", date: "4-5 май", homeTeam: "Ақсу", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "8 тур", date: "11-12 май", homeTeam: "Ордабасы", awayTeam: "Тобыл", result: "", choice: "" },
+        { round: "9 тур", date: "18-19 май", homeTeam: "Ақтөбе", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "10 тур", date: "1-2 июнь", homeTeam: "Ордабасы", awayTeam: "Жетісу", result: "", choice: "" },
+        { round: "11 тур", date: "15-16 июнь", homeTeam: "Астана", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "12 тур", date: "22-23 июнь", homeTeam: "Жеңіс", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "13 тур", date: "29-30 июнь", homeTeam: "Ордабасы", awayTeam: "Қайсар", result: "", choice: "" },
+        { round: "14 тур", date: "13-14 июль", homeTeam: "Ордабасы", awayTeam: "Тұран", result: "", choice: "" },
+        { round: "15 тур", date: "20-21 июль", homeTeam: "Жетісу", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "16 тур", date: "3-4 август", homeTeam: "Ордабасы", awayTeam: "Ақсу", result: "", choice: "" },
+        { round: "17 тур", date: "17-18 август", homeTeam: "Шахтер", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "18 тур", date: "24-25 август", homeTeam: "Ордабасы", awayTeam: "Ақтөбе", result: "", choice: "" },
+        { round: "19 тур", date: "31 август-1 сентябрь", homeTeam: "Қайсар", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "20 тур", date: "14-15 сентябрь", homeTeam: "Ордабасы", awayTeam: "Атырау", result: "", choice: "" },
+        { round: "21 тур", date: "21-22 сентябрь", homeTeam: "Ордабасы", awayTeam: "Астана", result: "", choice: "" },
+        { round: "22 тур", date: "5-6 октябрь", homeTeam: "Қызылжар", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "23 тур", date: "19-20 октябрь", homeTeam: "Тобыл", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "24 тур", date: "26-27 октябрь", homeTeam: "Ордабасы", awayTeam: "Жеңіс", result: "", choice: "" },
+        { round: "25 тур", date: "2-3 ноябрь", homeTeam: "Қайрат", awayTeam: "Ордабасы", result: "", choice: "" },
+        { round: "26 тур", date: "10 ноябрь", homeTeam: "Ордабасы", awayTeam: "Елімай", result: "", choice: "" }
     ];
-    // Функция для отображения матчей в таблице
+    // Ойын нәтижелерін кестеде көрсету үшін функция
     function displayMatches(matches) {
         var tableBody = document.querySelector("#matchesTable tbody");
-        tableBody.innerHTML = ""; // Очищаем тело таблицы перед добавлением новых данных
+        tableBody.innerHTML = ""; // Жаңа деректерді қосу алдында кестенің тілін тазартамыз
         matches.forEach(function(match, index) {
             var row = "<tr>";
             row += "<td>" + match.round + "</td>";
@@ -97,33 +97,33 @@
             row += "<td>" + match.awayTeam + "</td>";
             row += "<td class='resultCell'>" + match.result + "</td>";
             row += "<td><select class='resultSelect' data-index='" + index + "'>" +
-                   "<option value=''>Выберите</option>" +
-                   "<option value='win'>Победа</option>" +
-                   "<option value='draw'>Ничья</option>" +
-                   "<option value='loss'>Поражение</option>" +
+                   "<option value=''>Таңдаңыз</option>" +
+                   "<option value='win'>Жеңіс</option>" +
+                   "<option value='draw'>Тең</option>" +
+                   "<option value='loss'>Жеңіліс</option>" +
                    "</select></td>";
             row += "</tr>";
             tableBody.innerHTML += row;
         });
-        // Назначаем обработчик выбора результата матча
+        // Нәтиже таңдауының өңделуі үшін әрекеттерді саламыз
         var resultSelects = document.querySelectorAll(".resultSelect");
         resultSelects.forEach(function(select) {
             select.addEventListener("change", handleResultSelection);
         });
     }
 
-    // Обработчик выбора результата матча
+    // Ойын нәтижесін таңдау әрекеті
     function handleResultSelection(event) {
         var selectedIndex = event.target.dataset.index;
         var selectedResult = event.target.value;
         var previousResult = matchesData[selectedIndex].result;
         matchesData[selectedIndex].result = selectedResult;
         var totalPoints = calculateTotalPoints(matchesData);
-        document.querySelector("#totalPoints").textContent = "Общее количество очков: " + totalPoints;
+        document.querySelector("#totalPoints").textContent = "Жалпы ұпай саны: " + totalPoints;
         updateResultCell(selectedIndex, selectedResult);
     }
 
-    // Функция для подсчета общего количества очков
+    // Жалпы ұпай санын есептеу үшін функция
     function calculateTotalPoints(matches) {
         var totalPoints = 0;
         matches.forEach(function(match) {
@@ -136,19 +136,19 @@
         return totalPoints;
     }
 
-    // Функция для обновления цвета ячейки результата
+    // Нәтиже ұяшықтың түсін жаңарту әрекеті
     function updateResultCell(index, result) {
         var resultCell = document.querySelectorAll(".resultCell")[index];
         resultCell.textContent = result;
         resultCell.className = "resultCell " + result;
     }
 
-    // Инициализация при загрузке страницы
+    // Бет жүктелгенде іске асыру
     displayMatches(matchesData);
     var totalPoints = calculateTotalPoints(matchesData);
-    document.querySelector("#totalPoints").textContent = "Общее количество очков: " + totalPoints;
+    document.querySelector("#totalPoints").textContent = "Жалпы ұпай саны: " + totalPoints;
 
-    // Обработчик фильтра выбора результата
+    // Нәтиже таңдау фильтрінің әрекеті
     document.querySelector("#resultFilter").addEventListener("change", function() {
         var selectedResult = this.value;
         var filteredMatches = matchesData.filter(function(match) {
@@ -156,11 +156,11 @@
         });
         displayMatches(filteredMatches);
         var totalPoints = calculateTotalPoints(filteredMatches);
-        document.querySelector("#totalPoints").textContent = "Общее количество очков: " + totalPoints;
+        document.querySelector("#totalPoints").textContent = "Жалпы ұпай саны: " + totalPoints;
     });
 </script>
-   <a href="https://aiaqdop.github.io/">Calc</a>
-<a href="https://aiaqdop.github.io/ordabasy">Orda</a>
-<a href="https://aiaqdop.github.io/ordafinance">Finance</a>
+   <a href="https://aiaqdop.github.io/">Калькулятор</a>
+<a href="https://aiaqdop.github.io/ordabasy">Ордабасы</a>
+<a href="https://aiaqdop.github.io/ordafinance">Қаржы</a>
 </body>
 </html>
